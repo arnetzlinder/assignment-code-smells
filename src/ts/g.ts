@@ -9,6 +9,16 @@ function sumarizeLengthJumps(jumpings: number[]): number {
   ;
 }
 
+// function getLength(jumpings: number[]): number {
+//   let totalNumber = 0;
+
+//   totalNumber = jumpings.reduce(
+//     (jumpDistanceSoFar, currentJump) => jumpDistanceSoFar + currentJump
+//   );
+
+//   return totalNumber;
+// }
+
 /*
   2. I detta exempel har vi fokuserat på if-statements. Se om du kan göra exemplet bättre!
   */
@@ -79,12 +89,11 @@ function calculateDailyAverageTemperature (sumAverageTemperatures: number) {
   4. Följande funktion kommer att presentera ett objekt i dom:en. 
   Se om du kan göra det bättre. Inte bara presentationen räknas, även strukturer.
   */
-//Lyft över parametrarna i en egen klass under models
 
 function showProduct(product: Product) {
   let container = document.createElement("div") as HTMLDivElement;
   let productTitle = document.createElement("h3");
-  let productPrice = document.createElement("p");
+  let productPrice = document.createElement("span");
   let productImage = document.createElement("img");
 
   productTitle.innerHTML = product.name;
@@ -97,49 +106,29 @@ function showProduct(product: Product) {
   product.parent.appendChild(container);
 }
 
-// function showProduct(product: Product) {
-//   let container = document.createElement("div");
-//   let title = document.createElement("h4");
-//   let price = document.createElement("strong"); //ändrat till engelska istället för pris
-//   let imageTag = document.createElement("img");
-
-//   title.innerHTML = product.name;
-//   price.innerHTML = product.price.toString();
-//   imageTag.src = product.image;
-
-//   container.appendChild(title);
-//   container.appendChild(imageTag);
-//   container.appendChild(price);
-//   product.parent.appendChild(container);
-// }
-
 /*
   5. Följande funktion kommer presentera studenter. Men det finns ett antal saker som 
   går att göra betydligt bättre. Gör om så många som du kan hitta!
   */
-function presentStudents(students: Student[]) {
-  for (const student of students) {
-    if (student.handedInOnTime) {
-      let container = document.createElement("div");
+
+  function presentStudents(students: Student[]) {
+    for (const student of students) {
+      let container = document.createElement("li");
       let checkbox = document.createElement("input");
       checkbox.type = "checkbox";
-      checkbox.checked = true;
-
+      let listOfStudents;
       container.appendChild(checkbox);
-      let listOfStudents = document.querySelector("ul#passedstudents");
-      listOfStudents?.appendChild(container);
-    } else {
-      let container = document.createElement("div");
-      let checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.checked = false;
 
-      container.appendChild(checkbox);
-      let listOfStudents = document.querySelector("ul#failedstudents");
+      if (student.handedInOnTime) {
+        checkbox.checked = true;
+        listOfStudents = document.querySelector("ul#passedstudents");
+      } else {
+        checkbox.checked = false;
+        listOfStudents = document.querySelector("ul#failedstudents");
+      }
       listOfStudents?.appendChild(container);
     }
   }
-}
 
 /*
   6. Skriv en funktion som skall slå ihop följande texter på ett bra sätt:
@@ -150,18 +139,7 @@ function presentStudents(students: Student[]) {
 function concatenateStrings () {
   let texts: string[] = ["Lorem", "ipsum", "dolor", "sit", "amet"];
   return texts.join(" ");
-  }
-
-// function concatenateStrings() {
-//   let result = "";
-//   result += "Lorem";
-//   result += "ipsum";
-//   result += "dolor";
-//   result += "sit";
-//   result += "amet";
-
-//   return result;
-// }
+}
 
 /* 
 7. Denna funktion skall kontrollera att en användare är över 20 år och göra någonting.
@@ -169,20 +147,22 @@ function concatenateStrings () {
     fler och fler parametrar behöver läggas till? T.ex. avatar eller adress. Hitta en bättre
     lösning som är hållbar och skalar bättre. 
 */
-function createUser(user: User
-//flyttat till egen fil i models
-) {
-  // Validation
-
-  let ageDiff = Date.now() - user.birthday.getTime();
+const MINIMUM_REQUIRED_AGE = 20;
+const EPOCH_START_TIME = 1970;
+function getUserAge(birthday: Date) {
+  let ageDiff = Date.now() - birthday.getTime();
+  
   let ageDate = new Date(ageDiff);
-  let userAge = Math.abs(ageDate.getUTCFullYear() - 1970);
+  const userAge = Math.abs(ageDate.getUTCFullYear() - EPOCH_START_TIME);
+  return userAge;
+}
 
-  console.log(userAge);
+function createUser(user: User) {
+  const userAge = getUserAge(user.birthday);
 
-  if (!(userAge < 20)) {
-    // Logik för att skapa en användare
+  if(userAge >= MINIMUM_REQUIRED_AGE) {
+    //Logik för att skapa en användare
   } else {
-    return "Du är under 20 år";
+    return `Du är under ${MINIMUM_REQUIRED_AGE} år`;
   }
 }
