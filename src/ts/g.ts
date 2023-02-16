@@ -48,8 +48,8 @@ function getAverageWeeklyTemperature(temperatures: cityTempData[]) {
   let sumAverageTemperatures:number = 0; 
   for (let i = 0; i < temperatures.length; i++) {
     if (temperatures[i].city === CITY_NAME) {
-      if(temperatures[i].date.getTime() > Date.now() - ONE_WEEK_IN_MS) {
-        return sumAverageTemperatures = temperatures[i].temp;
+      if(temperatures[i].date.getTime() > (Date.now() - ONE_WEEK_IN_MS)) {
+        sumAverageTemperatures += temperatures[i].temp;
       }
     }
   }
@@ -80,6 +80,22 @@ function calculateDailyAverageTemperature (sumAverageTemperatures: number) {
   Se om du kan göra det bättre. Inte bara presentationen räknas, även strukturer.
   */
 //Lyft över parametrarna i en egen klass under models
+
+function showProduct(product: Product) {
+  let container = document.createElement("div") as HTMLDivElement;
+  let productTitle = document.createElement("h3");
+  let productPrice = document.createElement("p");
+  let productImage = document.createElement("img");
+
+  productTitle.innerHTML = product.name;
+  productPrice.innerHTML = (product.price).toString();
+  productImage.src = product.image;
+
+  container.appendChild(productTitle);
+  container.appendChild(productImage);
+  container.appendChild(productPrice);
+  product.parent.appendChild(container);
+}
 
 // function showProduct(product: Product) {
 //   let container = document.createElement("div");
