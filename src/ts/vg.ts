@@ -144,32 +144,33 @@ export function sortProductsBy (sort: SortBy, products: Product[]): Product[] {
   }
   
   function sortBy(i: number, dogproduct: HTMLDivElement) {
-    if (productList[i].category === "dogcollars") {
-      let cat1: HTMLElement = document.getElementById("dogcollars") as HTMLElement;
-      dogproduct.className = "dogproduct";
-      cat1.appendChild(dogproduct);
-    }
-    if (productList[i].category === "dogfood") {
-      let cat2: HTMLElement = document.getElementById(
-        "dogfood"
-      ) as HTMLElement;
-      dogproduct.className = "dogproduct";
-      cat2.appendChild(dogproduct);
-    }
-    if (productList[i].category == "dogtoys") {
-      let cat3: HTMLElement = document.getElementById("dogtoys") as HTMLElement;
-      dogproduct.className = "dogproduct";
-      cat3.appendChild(dogproduct);
-    }
-    if (productList[i].category === "poopbags") {
-      let cat4: HTMLElement = document.getElementById("poopbags") as HTMLElement;
-      dogproduct.className = "dogproduct";
-      cat4.appendChild(dogproduct);
-    }
-    if (productList[i].category === "dogvitamines") {
-      let cat5: HTMLElement = document.getElementById("dogvitamines") as HTMLElement;
-      dogproduct.className = "dogproduct";
-      cat5.appendChild(dogproduct);
+    switch (productList[i].category) {
+      case "dogcollars":
+        let cat1: HTMLElement = document.getElementById("dogcollars") as HTMLElement;
+        dogproduct.className = "dogproduct";
+        cat1.appendChild(dogproduct);
+        break;
+      case "dogfood":
+        let cat2: HTMLElement = document.getElementById("dogfood") as HTMLElement;
+        dogproduct.className = "dogproduct";
+        cat2.appendChild(dogproduct);
+        break;
+      case "dogtoys":
+        let cat3: HTMLElement = document.getElementById("dogtoys") as HTMLElement;
+        dogproduct.className = "dogproduct";
+        cat3.appendChild(dogproduct);
+        break;
+      case "poopbags":
+        let cat4: HTMLElement = document.getElementById("poopbags") as HTMLElement;
+        dogproduct.className = "dogproduct";
+        cat4.appendChild(dogproduct);
+        break;
+      case "dogvitamines":
+        let cat5: HTMLElement = document.getElementById("dogvitamines") as HTMLElement;
+        dogproduct.className = "dogproduct";
+        cat5.appendChild(dogproduct);
+        break;
+      default:
     }
   }
   
