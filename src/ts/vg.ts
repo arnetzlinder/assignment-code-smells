@@ -1,3 +1,5 @@
+import { CartProduct } from "./models/CartProduct";
+
 /*
 1. Se om du kan hitta problem med koden nedan och se om du kan göra den bättre.
 */
@@ -177,91 +179,85 @@ export function sortProductsBy (sort: SortBy, products: Product[]): Product[] {
 /*
   3. Refaktorera funktionen getfromstorage
   */
-// export class CartProduct {
-//   constructor(
-//     public name: string,
-//     public image: string,
-//     public price: number,
-//     public amount: number
-//   ) {}
-// }
 
-// function getfromstorage() {
-//   let container = document.getElementById("checkout-table");
+  let fromstorage: string = localStorage.getItem("saveCartArray") || "";
+  let cartProducts: CartProduct[] = JSON.parse(fromstorage);
 
-//   let fromstorage: string = localStorage.getItem("cartArray") || "";
-//   let astext: CartProduct[] = JSON.parse(fromstorage);
+  function createHTMLTable() {
+    let { titleContainer, amountContainer, productQuantity, checkoutTotal } = renderTable ();
 
-//   let productcontainer = document.getElementById(
-//     "product-ckeckout-container"
-//   ) as HTMLDivElement;
+    for (let i: number = 0; i < cartProducts.length; i++) {
+      let amountQuantity: HTMLTableCellElement = renderTableHead(i);
+  
+      renderButtons(amountQuantity);
+    }
+  
+    let addition = cartProducts.reduce((accumulate, current) =>{
+      return accumulate + (current.price * current.amount);
+    }, 0);
+  
+    let totalprice: HTMLTableCellElement = document.createElement("th");
+    checkoutTotal.appendChild(totalprice);
+    totalprice.innerHTML = addition + "$";
+    totalprice.id = "total__price";
+  
+    function renderButtons(amountQuantity: HTMLTableCellElement) {
+      let amountPlusBtn: HTMLButtonElement = document.createElement("button");
+      amountQuantity.appendChild(amountPlusBtn);
+      amountQuantity.className = "amount__quantity";
+  
+      let iconPlus: HTMLSpanElement = document.createElement("i");
+      amountPlusBtn.appendChild(iconPlus);
+  
+      iconPlus.className = "fas fa-plus";
+      amountPlusBtn.className = "plusbtn";
+  
+      let iconMinus: HTMLSpanElement = document.createElement("i");
+      iconMinus.className = "fas fa-minus";
+  
+      let amountminusbtn: HTMLButtonElement = document.createElement("button");
+      amountQuantity.appendChild(amountminusbtn);
+      amountminusbtn.appendChild(iconMinus);
+      amountminusbtn.className = "minusbtn";
+    }
 
-//   let amountcontainer = document.getElementById(
-//     "amount-checkout-container2"
-//   ) as HTMLDivElement;
-//   let amounttext: HTMLTableCellElement = document.createElement("th");
-//   amountcontainer.appendChild(amounttext);
-//   amounttext.innerHTML = "amount:";
+    function renderTableHead(i: number) {
+      let tableProduct: HTMLTableCellElement = document.createElement("th");
+      titleContainer.appendChild(tableProduct);
+      tableProduct.innerHTML = cartProducts[i].name;
+      tableProduct.className = "table__product";
+  
+      let tableAmount: HTMLTableCellElement = document.createElement("th");
+      amountContainer.appendChild(tableAmount);
+      tableAmount.innerHTML = "x" + cartProducts[i].amount;
+      tableAmount.className = "table__amount";
+  
+      let amountQuantity: HTMLTableCellElement = document.createElement("th");
+      productQuantity.appendChild(amountQuantity);
+      return amountQuantity;
+    }
 
-//   let titlecontainer = document.getElementById(
-//     "title-container"
-//   ) as HTMLTableRowElement;
-//   titlecontainer.innerHTML = "<strong>products:</strong>";
-
-//   let productquantity = document.getElementById(
-//     "product-quantity"
-//   ) as HTMLTableRowElement;
-//   let qttext: HTMLTableCellElement = document.createElement("th");
-//   productquantity.appendChild(qttext);
-//   qttext.innerHTML = "change quantity:";
-
-//   let checkkouttotal2 = document.getElementById(
-//     "title-total"
-//   ) as HTMLTableCellElement;
-//   let totaltext: HTMLTableCellElement = document.createElement("th");
-//   checkkouttotal2.appendChild(totaltext);
-//   totaltext.innerHTML = "total:";
-
-//   for (let i: number = 0; i < astext.length; i++) {
-//     let productt: HTMLTableCellElement = document.createElement("th");
-//     titlecontainer.appendChild(productt);
-//     productt.innerHTML = astext[i].name;
-//     productt.className = "hej";
-
-//     let amountt: HTMLTableCellElement = document.createElement("th");
-//     amountcontainer.appendChild(amountt);
-//     amountt.innerHTML = "x" + astext[i].amount;
-//     amountt.className = "hej";
-
-//     let amountqt: HTMLTableCellElement = document.createElement("th");
-//     productquantity.appendChild(amountqt);
-//     let amountplusbtn: HTMLButtonElement = document.createElement("button");
-//     amountqt.appendChild(amountplusbtn);
-//     amountqt.className = "hej";
-
-//     let icon: HTMLSpanElement = document.createElement("i");
-//     amountplusbtn.appendChild(icon);
-
-//     icon.className = "fas fa-minus";
-//     amountplusbtn.className = "plusbtn";
-
-//     let icon2: HTMLSpanElement = document.createElement("i");
-//     icon2.className = "fas fa-plus";
-
-//     let amountminusbtn: HTMLButtonElement = document.createElement("button");
-//     amountqt.appendChild(amountminusbtn);
-//     amountminusbtn.appendChild(icon2);
-//     amountminusbtn.className = "minusbtn";
-//   }
-
-//   let addition: number = 0;
-
-//   for (let i = 0; i < astext.length; i++) {
-//     addition += astext[i].price *= astext[i].amount;
-//   }
-
-//   let totalprice2: HTMLTableCellElement = document.createElement("th");
-//   checkkouttotal2.appendChild(totalprice2);
-//   totalprice2.innerHTML = addition + "$";
-//   totalprice2.id = "totalincenter";
-// }
+    function renderTable() {
+    let amountContainer = document.getElementById("amount-checkout-container") as HTMLDivElement;
+  
+    let amountText: HTMLTableCellElement = document.createElement("th");
+    amountContainer.appendChild(amountText);
+    amountText.innerHTML = "amount:";
+  
+    let titleContainer = document.getElementById("title-container") as HTMLTableRowElement;
+    titleContainer.innerHTML = `<strong>products:</strong>`;
+  
+    let productQuantity = document.getElementById("product-quantity") as HTMLTableRowElement;
+  
+    let qttext: HTMLTableCellElement = document.createElement("th");
+    productQuantity.appendChild(qttext);
+    qttext.innerHTML = "change quantity:";
+  
+    let checkoutTotal = document.getElementById("title-total") as HTMLTableCellElement;
+  
+    let totaltext: HTMLTableCellElement = document.createElement("th");
+    checkoutTotal.appendChild(totaltext);
+    totaltext.innerHTML = "total:";
+    return { titleContainer, amountContainer, productQuantity, checkoutTotal };
+    }
+  }
